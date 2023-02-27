@@ -1,0 +1,43 @@
+from django.contrib.auth.models import User
+from news.models import *
+
+
+1. создание пользователя:
+User.objects.create_user('username')
+
+2. создание автора:
+Author.objects.create(user=User.objects.get(id=2))
+
+3. добавление категорий:
+Category.objects.create(theme='name')
+
+4. добавить 2 статьи и 1 новость:
+Post.objects.create(author=Author.objects.get(id=1), news=False, title = 'Hello World', text = 'Some text')
+
+5. Присвоить им категории (как минимум в одной статье/новости должно быть не меньше 2 категорий):
+PostCategory.objects.create(post=Post.objects.get(id=2), category=Category.objects.get(id=3))
+
+6. Создать как минимум 4 комментария к разным объектам модели Post (в каждом объекте должен быть как минимум один комментарий):
+Comment.objects.create(post=Post.objects.get(id=1),user=User.objects.get(id=1),text='Yes! Python is my favorite language!')
+
+7. Применяя функции like() и dislike() к статьям/новостям и комментариям, скорректировать рейтинги этих объектов:
+Post.objects.get(id=1).like()
+Comment.objects.get(id=1).like()
+
+8. Обновить рейтинги пользователей:
+Author1 = Author.objects.get(id=1)
+Author1.update_rating() 
+
+9. Вывести username и рейтинг лучшего пользователя (применяя сортировку и возвращая поля первого объекта):
+Rating:   Author.objects.all().order_by('rating').values('rating').last()['rating']
+Username: Author.objects.all().order_by('rating').last().user
+
+10. Вывести дату добавления, username автора, рейтинг, заголовок и превью лучшей статьи, основываясь на лайках/дислайках к этой статье:
+Username: Post.objects.all().order_by('rating').last().author.user
+Rating:   Post.objects.all().order_by('rating').values('date_in', 'rating', 'title').last() 
+Preview:  Post.objects.all().order_by('rating').last().preview()
+
+11. Вывести все комментарии (дата, пользователь, рейтинг, текст) к этой статье:
+Comment.objects.filter(post=Post.objects.all().order_by('rating').last()).values('date_in', 'user', 'rating', 'text')
+
+
