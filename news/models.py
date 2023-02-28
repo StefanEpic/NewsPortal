@@ -34,6 +34,7 @@ class Post(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     news = models.BooleanField(default=True)
     date_in = models.DateTimeField(auto_now_add=True)
+    category = models.ManyToManyField(Category, through='PostCategory')
     title = models.CharField(max_length=50)
     text = models.TextField()
     rating = models.IntegerField(default=0)
