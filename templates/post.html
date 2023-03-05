@@ -1,0 +1,18 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+Post
+{% endblock title %}
+
+{% block content %}
+    <h1>{{ post.title }}</h1>
+    <h6>Дата: {{ post.date_in|date:'d M Y' }}</h6>
+    <hr>
+    {% if post.image %}
+        <img src="{{MEDIA_DIR}}{{post.image.url}}" width="600">
+        <hr>
+    {% endif %}
+    <h4>{{ post.text|linebreaks }}</h4>
+    <hr>
+    <h6>Автор: {{ post.author.user }}</h6>
+{% endblock content %}

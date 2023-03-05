@@ -25,9 +25,15 @@ class Author(models.Model):
         self.rating = sum_post + sum_comment + sum_comment_post
         self.save()
 
+    def __str__(self):
+        return self.user.username
+
 
 class Category(models.Model):
     theme = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.theme
 
 
 class Post(models.Model):
@@ -35,9 +41,10 @@ class Post(models.Model):
     news = models.BooleanField(default=True)
     date_in = models.DateTimeField(auto_now_add=True)
     category = models.ManyToManyField(Category, through='PostCategory')
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=100)
     text = models.TextField()
     rating = models.IntegerField(default=0)
+    image = models.ImageField(upload_to='photos/%Y/%m/%d/', blank=True)
 
     def like(self):
         if self.rating < 10:
@@ -54,10 +61,16 @@ class Post(models.Model):
             return self.text[:124] + '...'
         return self.text
 
+    def __str__(self):
+        return f'{self.author.user.username} / {self.title}'
+
 
 class PostCategory(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.category} / {self.post.title}'
 
 
 class Comment(models.Model):
@@ -76,3 +89,6 @@ class Comment(models.Model):
         if self.rating > 0:
             self.rating -= 1
         self.save()
+
+    def __str__(self):
+        return f'{self.user.username} / {self.text}'

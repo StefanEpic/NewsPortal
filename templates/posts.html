@@ -1,0 +1,20 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+{% block title %}
+Posts
+{% endblock title %}
+
+{% block content %}
+    {% for post in posts %}
+        <h2><a class="fw-bolder" href="{{ post.id }}">{{ post.title|censor }}</a></h2>
+        <h6>{{ post.date_in|date:'d M Y' }}</h6>
+        <p class="lead">{{ post.text|truncatechars:20}}</p>
+        <ul>
+            <li>Автор: {{ post.author.user }}</li>
+        </ul>
+        <hr>
+    {% endfor %}
+
+{% endblock content %}
