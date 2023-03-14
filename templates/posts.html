@@ -1,20 +1,66 @@
 {% extends 'flatpages/default.html' %}
 
 {% load custom_filters %}
+{% load custom_tags %}
 
 {% block title %}
-Posts
+Новости
 {% endblock title %}
 
 {% block content %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?{% url_replace page=1 %}"><<</a>
+            {% if page_obj.previous_page_number != 1 %}
+                <a href="?{% url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+            {% endif %}
+        {% endif %}
+
+        <span>{{ page_obj.number }}</span>
+
+        {% if page_obj.has_next %}
+            <a href="?{% url_replace page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+            {% if paginator.num_pages != page_obj.next_page_number %}
+                <a href="?{% url_replace page=page_obj.paginator.num_pages %}">>></a>
+            {% endif %}
+        {% endif %}
+    </div> 
+
     {% for post in posts %}
-        <h2><a class="fw-bolder" href="{{ post.id }}">{{ post.title|censor }}</a></h2>
-        <h6>{{ post.date_in|date:'d M Y' }}</h6>
-        <p class="lead">{{ post.text|truncatechars:20}}</p>
-        <ul>
-            <li>Автор: {{ post.author.user }}</li>
-        </ul>
-        <hr>
+        <div class="post">
+            <div class="post-h1"><a href="{{ post.id }}">{{ post.title|censor }}</a></div>
+            <div class="post-h3">{{ post.date_in|date:'d M Y' }}</div>
+            <div class="post-h2">{{ post.text|truncatechars:60}}</div>
+            <div class="post-h3-right">Автор: {{ post.author.user }}</div>
+        </div>
+        <hr class="hr-shelf">
     {% endfor %}
+    
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?{% url_replace page=1 %}"><<</a>
+            {% if page_obj.previous_page_number != 1 %}
+                <a href="?{% url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+            {% endif %}
+        {% endif %}
+
+        <span>{{ page_obj.number }}</span>
+
+        {% if page_obj.has_next %}
+            <a href="?{% url_replace page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+            {% if paginator.num_pages != page_obj.next_page_number %}
+                <a href="?{% url_replace page=page_obj.paginator.num_pages %}">>></a>
+            {% endif %}
+        {% endif %}
+    </div>
 
 {% endblock content %}
+
+{% block rightsidebar %}
+    <div class="right-sidebar-filter">
+        <form class="form" action="" method="get">
+            {{ filterset.form.as_p }}
+            <input type="submit" value="Найти" />
+        </form>
+    </div>
+{% endblock rightsidebar %}

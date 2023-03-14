@@ -3,18 +3,26 @@
 {% load custom_filters %}
 
 {% block title %}
-Post
+{{ post.title }}
 {% endblock title %}
 
 {% block content %}
-    <h1>{{ post.title|censor }}</h1>
-    <h6>Дата: {{ post.date_in|date:'d M Y' }}</h6>
-    <hr>
+    <div class="post">
+        <div class="post-h1">{{ post.title|censor }}</div>
+        <div class="post-h3">Дата: {{ post.date_in|date:'d M Y' }}</div>
+    </div>
+    <hr class="hr-shelf">
+
     {% if post.image %}
-        <img src="{{MEDIA_DIR}}{{post.image.url}}" width="600">
-        <hr>
+    <div class="post-img">
+        <img src="{{MEDIA_DIR}}{{post.image.url}}">
+        <hr class="hr-shelf">
+    </div>
     {% endif %}
-    <h4>{{ post.text|censor|linebreaks }}</h4>
-    <hr>
-    <h6>Автор: {{ post.author.user }}</h6>
+
+    <div class="post">
+        <div class="post-h2">{{ post.text|censor|linebreaks }}</div>
+    </div>
+    <hr class="hr-shelf">
+    <div class="post-h3-right">Автор: {{ post.author.user }}</div>
 {% endblock content %}
