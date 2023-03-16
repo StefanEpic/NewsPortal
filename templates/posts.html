@@ -8,23 +8,12 @@
 {% endblock title %}
 
 {% block content %}
-    <div class="pagination">
-        {% if page_obj.has_previous %}
-            <a href="?{% url_replace page=1 %}"><<</a>
-            {% if page_obj.previous_page_number != 1 %}
-                <a href="?{% url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
-            {% endif %}
-        {% endif %}
-
-        <span>{{ page_obj.number }}</span>
-
-        {% if page_obj.has_next %}
-            <a href="?{% url_replace page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
-            {% if paginator.num_pages != page_obj.next_page_number %}
-                <a href="?{% url_replace page=page_obj.paginator.num_pages %}">>></a>
-            {% endif %}
-        {% endif %}
-    </div> 
+    <div class="content-menu">
+        <ul>
+            <li><a href="news/create/">Добавить новость</a></li>
+            <li><a href="articles/create/">Добавить статью</a></li>
+        </ul>
+    </div>
 
     {% for post in posts %}
         <div class="post">
@@ -58,7 +47,7 @@
 
 {% block rightsidebar %}
     <div class="right-sidebar-filter">
-        <form class="form" action="" method="get">
+        <form class="form-filter" action="" method="get">
             {{ filterset.form.as_p }}
             <input type="submit" value="Найти" />
         </form>

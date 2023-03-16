@@ -39,11 +39,11 @@ class Category(models.Model):
 
 class Post(models.Model):
     news = 'news'
-    post = 'post'
+    arti = 'arti'
 
     TYPES = [
         (news, 'Новость'),
-        (post, 'Статья')
+        (arti, 'Статья')
     ]
 
     author = models.ForeignKey(Author, on_delete=models.CASCADE)

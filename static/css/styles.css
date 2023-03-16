@@ -139,6 +139,34 @@
   border: 1px solid grey;
 }
 
+.content-menu {
+  width: 100%;
+  height: 50px;
+  background-color: black;
+  border-radius: 30px;
+  opacity: 0.8;
+  display: inline-block;
+  line-height: 50px;
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+.content-menu li {
+  margin-right: 35px;
+  display: inline-block;
+}
+
+.content-menu a {
+  font-family: 'Caveat';
+  font-size: 24px;
+  color: #edbc7d;
+  text-decoration: none;
+}
+
+.content-menu a:hover {
+  color: #b47c42;
+}
+
 .post {
   width: auto;
   margin-left: 50px;
@@ -254,8 +282,8 @@
   background: #b47c42;
 }
 
-.form select, 
-.form input {
+.form-filter select,
+.form-filter input {
   min-height: 30px;
   background: #f3cea1;
   border-radius: 3px;
@@ -267,7 +295,7 @@
   margin: 5px;
 }
 
-.form input[type=submit] {
+.form-filter input[type=submit] {
   padding:5px 15px; 
   background:#f3cea1; 
   border:0 none;
@@ -276,7 +304,40 @@
   border-radius: 5px;
 }
 
-.form input[type=submit]:hover,
-.form input[type=submit]:focus {
+.form-filter input[type=submit]:hover,
+.form-filter input[type=submit]:focus {
+  background-color: #b47c42;
+}
+
+.form-edit select,
+.form-edit input,
+.form-edit textarea {
+  min-height: 30px;
+  background: black;
+  opacity: 0.8;
+  border-radius: 3px;
+  border: 1px solid black;
+  outline: none;
+  padding: 0 10px;
+  max-width: 200px;
+  font-size: 16px;
+  margin: 5px;
+  color: #f3cea1;
+}
+
+.form-edit input[type=submit],
+.form-edit input[type=file] {
+  padding:5px 15px; 
+  background: black;
+  opacity: 0.8;
+  color: #f3cea1;
+  border:0 none;
+  cursor:pointer;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+.form-edit input[type=submit]:hover,
+.form-editfilter input[type=submit]:focus {
   background-color: #b47c42;
 }
