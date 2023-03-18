@@ -46,14 +46,14 @@ class Post(models.Model):
         (arti, 'Статья')
     ]
 
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    type = models.CharField(max_length=4, choices=TYPES, default=news)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, verbose_name='Автор')
+    type = models.CharField(max_length=4, choices=TYPES, default=news, verbose_name='Тип')
     date_in = models.DateTimeField(auto_now_add=True)
-    category = models.ManyToManyField(Category, through='PostCategory')
-    title = models.CharField(max_length=100)
-    text = models.TextField()
+    category = models.ManyToManyField(Category, through='PostCategory', verbose_name='Категория')
+    title = models.CharField(max_length=100, verbose_name='Заголовок')
+    text = models.TextField(verbose_name='Текст')
     rating = models.IntegerField(default=0)
-    image = models.ImageField(upload_to='photos/%Y/%m/%d/', blank=True)
+    image = models.ImageField(upload_to='post_images/%Y/%m/%d/', blank=True, verbose_name='Изображение')
 
     def like(self):
         if self.rating < 10:

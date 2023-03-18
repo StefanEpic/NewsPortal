@@ -36,7 +36,7 @@
   float: left;
 }
 
-#main:after {
+.main:after {
   visibility: hidden;
   display: block;
   font-size: 0;
@@ -45,9 +45,9 @@
   height: 0;
   float: left;
 }
-#main { display: inline-block; }
-* html #main { height: 1%; }
-#main { display: block; }
+.main { display: inline-block; }
+* html .main { height: 1%; }
+.main { display: block; }
 
 #leftsidebar {
   width: 25%;
@@ -134,6 +134,7 @@
   padding: 30px;
   border-radius: 30px;
   background: rgba(white, 0.6);
+  box-shadow: 0 4px 16px rgb(54, 54, 54);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   border: 1px solid grey;
@@ -146,9 +147,26 @@
   border-radius: 30px;
   opacity: 0.8;
   display: inline-block;
+  margin-bottom: 20px;
+}
+
+.content-menu-left {
+  width: 50%;
+  height: 50px;
+  line-height: 50px;
+  float: left;
+}
+
+.content-menu a {
+  margin-left: 35px;
+}
+
+.content-menu-right {
+  width: 50%;
+  height: 50px;
   line-height: 50px;
   text-align: right;
-  margin-bottom: 20px;
+  float: left;
 }
 
 .content-menu li {
@@ -173,6 +191,30 @@
   margin-right: 50px;
 }
 
+.post-title {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.post-image {
+  width: auto;
+  text-align: center;
+  box-sizing: border-box;
+  float: left;
+}
+
+.post-image  img {
+  width: 300px;
+  text-align: center;
+  border-radius: 10px;
+}
+
+.post-text {
+  width: calc(100% - 300px);
+  box-sizing: border-box;
+  float: left;
+}
+
 .post-h1 {
   font-family: 'Russo One', sans-serif;
   color: black;
@@ -192,10 +234,23 @@
   color: #b47c42;
 }
 
+.post-h2-main {
+  font-size: 20px;
+  margin-left: 30px;
+  line-height: 150%;
+  text-align: justify;
+}
+
 .post-h2 {
   font-size: 20px;
   line-height: 150%;
   text-align: justify;
+}
+
+.post-h3-main {
+  font-family: 'Caveat';
+  font-size: 16px;
+  margin-left: 30px;
 }
 
 .post-h3 {
@@ -209,6 +264,13 @@
   text-align: right;
 }
 
+.post-h3-right-in {
+  font-family: 'Caveat';
+  font-size: 16px;
+  text-align: right;
+  margin-right: 50px;
+}
+
 .post-img {
   width: 100%;
   text-align: center;
@@ -216,6 +278,7 @@
 
 .post-img img {
   width: 600px;
+  border-radius: 20px;
 }
 
 .right-sidebar-filter {
@@ -235,16 +298,6 @@
   font-size: 20px;
   line-height: 150%;
   color: #edbc7d;
-}
-
-.footer-logo {
-  font-family: 'Caveat', cursive;
-  background: #edbc7d;
-  color: black;
-  opacity: 0.8;
-  font-size: 20px;
-  padding: 3px;
-  font-style: italic;
 }
 
 .hr-shelf {
@@ -309,9 +362,22 @@
   background-color: #b47c42;
 }
 
+.form-edit-label {
+  width: 20%;
+  font-size: 20px;
+  margin-top: 0.5rem;
+  float: left;
+}
+
+.form-edit-field {
+  width: 80%;
+  float: left;
+}
+
 .form-edit select,
 .form-edit input,
 .form-edit textarea {
+  box-sizing: border-box;
   min-height: 30px;
   background: black;
   opacity: 0.8;
@@ -319,10 +385,11 @@
   border: 1px solid black;
   outline: none;
   padding: 0 10px;
-  max-width: 200px;
+  width: 100%;
   font-size: 16px;
   margin: 5px;
   color: #f3cea1;
+  resize: none;
 }
 
 .form-edit input[type=submit],
@@ -340,4 +407,14 @@
 .form-edit input[type=submit]:hover,
 .form-editfilter input[type=submit]:focus {
   background-color: #b47c42;
+}
+
+.footer-logo {
+  font-family: 'Caveat', cursive;
+  background: #edbc7d;
+  color: black;
+  opacity: 0.8;
+  font-size: 20px;
+  padding: 3px;
+  font-style: italic;
 }

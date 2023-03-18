@@ -8,12 +8,15 @@
 
 {% block content %}
     <div class="content-menu">
-        <ul>
-            <li><a href="news/{{ post.id }}/edit/">Править новость</a></li>
-            <li><a href="articles/{{ post.id }}/edit/">Править статью</a></li>
-            <li><a href="news/{{ post.id }}/delete/">Удалить новость</a></li>
-            <li><a href="articles/{{ post.id }}/delete/">Удалить статью</a></li>
-        </ul>
+        <div class="content-menu-left">
+            <a href="#" onclick="history.back();">Назад</a>
+        </div>
+        <div class="content-menu-right">
+            <ul>
+                <li><a href="{{ post.id }}/edit/">Редактировать</a></li>
+                <li><a href="{{ post.id }}/delete/">Удалить</a></li>
+            </ul>
+        </div>
     </div>
 
     <div class="post">
@@ -33,5 +36,5 @@
         <div class="post-h2">{{ post.text|censor|linebreaks }}</div>
     </div>
     <hr class="hr-shelf">
-    <div class="post-h3-right">Автор: {{ post.author.user }}</div>
+    <div class="post-h3-right-in">Автор: {{ post.author.user }}</div>
 {% endblock content %}

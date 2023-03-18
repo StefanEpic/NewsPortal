@@ -3,7 +3,10 @@
 {% block content %}
 <form class="form-edit" action="" method="post">
     {% csrf_token %}
-    <div class="post-h2">Вы действительно хотите удалить "{{ object.title }}"?</div>
+    <div class="post-h1" align="center">Удаление</div>
+    <hr class="hr-shelf">
+    <div class="post-h2">Вы действительно хотите удалить <b>"{{ object.title }}"</b>?</div>
+    <hr class="hr-shelf">
     <input type="submit" value="Удалить" />
 </form>
 {% endblock content %}

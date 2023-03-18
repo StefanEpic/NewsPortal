@@ -9,18 +9,29 @@
 
 {% block content %}
     <div class="content-menu">
-        <ul>
-            <li><a href="news/create/">Добавить новость</a></li>
-            <li><a href="articles/create/">Добавить статью</a></li>
-        </ul>
-    </div>
+        <div class="content-menu-left"></div>
+        <div class="content-menu-right">
+            <ul>
+                <li><a href="create/">Добавить новость</a></li>
+            </ul>
+        </div>
+    </div>    
 
     {% for post in posts %}
         <div class="post">
-            <div class="post-h1"><a href="{{ post.id }}">{{ post.title|censor }}</a></div>
-            <div class="post-h3">{{ post.date_in|date:'d M Y' }}</div>
-            <div class="post-h2">{{ post.text|truncatechars:60}}</div>
-            <div class="post-h3-right">Автор: {{ post.author.user }}</div>
+            <div class="post-title">
+                <div class="post-h1"><a href="{{ post.id }}">{{ post.title|censor }}</a></div>
+            </div>
+            <div class="main">
+                <div class="post-image">
+                    <img src="{{MEDIA_DIR}}{{post.image.url}}">
+                </div>
+                <div class="post-text">
+                    <div class="post-h3-main">{{ post.date_in|date:'d M Y' }}</div>
+                    <div class="post-h2-main">{{ post.text|truncatechars:200}}</div>
+                    <div class="post-h3-right">Автор: {{ post.author.user }}</div>
+                </div>
+            </div>
         </div>
         <hr class="hr-shelf">
     {% endfor %}
@@ -49,7 +60,7 @@
     <div class="right-sidebar-filter">
         <form class="form-filter" action="" method="get">
             {{ filterset.form.as_p }}
-            <input type="submit" value="Найти" />
+            <input type="submit" value="Применить" />
         </form>
     </div>
 {% endblock rightsidebar %}

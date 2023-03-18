@@ -1,9 +1,17 @@
 {% extends 'flatpages/default.html' %}
 
 {% block content %}
-<form class="form-edit" action="" method="post">
+<div class="post-h1" align="center">Публикация</div>
+<hr class="hr-shelf">
+<form class="form-edit" action="" enctype="multipart/form-data" method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    {% for field in form %}
+    <div>
+        <div class="form-edit-label">{{field.label_tag}}</div>
+        <div class="form-edit-field">{{field}}</div>
+    </div>
+    {% endfor %}
+    <hr class="hr-shelf">
     <input type="submit" value="Сохранить" />
 </form>
 {% endblock content %}
