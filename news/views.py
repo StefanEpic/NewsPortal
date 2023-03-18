@@ -44,6 +44,7 @@ class PostCreate(CreateView):
         return super().form_valid(form)
 
 
+
 class PostUpdate(UpdateView):
     form_class = PostForm
     model = Post
