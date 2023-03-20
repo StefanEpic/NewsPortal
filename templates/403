@@ -1,7 +1,7 @@
 {% extends 'flatpages/default.html' %}
 
 {% block title %}
-Ошибка 404
+Ошибка 403
 {% endblock title %}
 
 {% block content %}
