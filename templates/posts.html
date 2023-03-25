@@ -8,6 +8,7 @@
 {% endblock title %}
 
 {% block content %}
+    {% if request.user.is_authenticated and not is_not_author %}
     <div class="content-menu">
         <div class="content-menu-left"></div>
         <div class="content-menu-right">
@@ -16,6 +17,7 @@
             </ul>
         </div>
     </div>    
+    {% endif %}
 
     {% for post in posts %}
         <div class="post">

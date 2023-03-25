@@ -7,17 +7,19 @@
 {% endblock title %}
 
 {% block content %}
-    <div class="content-menu">
-        <div class="content-menu-left">
-            <a href="#" onclick="history.back();">Назад</a>
+    {% if request.user.is_authenticated and not is_not_author %}
+        <div class="content-menu">
+            <div class="content-menu-left">
+                <a href="#" onclick="history.back();">Назад</a>
+            </div>
+            <div class="content-menu-right">
+                <ul>
+                    <li><a href="{{ post.id }}/edit/">Редактировать</a></li>
+                    <li><a href="{{ post.id }}/delete/">Удалить</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="content-menu-right">
-            <ul>
-                <li><a href="{{ post.id }}/edit/">Редактировать</a></li>
-                <li><a href="{{ post.id }}/delete/">Удалить</a></li>
-            </ul>
-        </div>
-    </div>
+    {% endif %}
 
     <div class="post">
         <div class="post-h1">{{ post.title|censor }}</div>
