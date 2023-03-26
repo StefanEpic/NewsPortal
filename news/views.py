@@ -93,3 +93,9 @@ def upgrade_me(request):
 
 class PersonalView(LoginRequiredMixin, TemplateView):
     template_name = 'account/personal.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_author'] = not self.request.user.groups.filter(
+            name='author').exists()
+        return context

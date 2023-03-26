@@ -4,5 +4,11 @@
 <h2>Страница авторизованного пользователя {{request.user.username}}</h2>
 <div> Здесь может содержаться персональная информация для каждого пользователя </div>
 
+{% if is_not_author %}
+    <div>
+        <a class="menu-bar-login-but" href="http://127.0.0.1:8000/upgrade/">Хочу стать автором!</a>
+    </div>
+{% endif %}
+
 <button> <a href="http://127.0.0.1:8000/accounts/logout/">Выйти</a> </button>
 {% endblock %}

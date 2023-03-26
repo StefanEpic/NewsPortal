@@ -24,6 +24,11 @@
     <div class="post">
         <div class="post-h1">{{ post.title|censor }}</div>
         <div class="post-h3">Дата: {{ post.date_in|date:'d M Y' }}</div>
+        <div class="post-h3">
+            {% for category in post.category.all %}
+               {{ category }}
+            {% endfor %}
+        </div>
     </div>
     <hr class="hr-shelf">
 

@@ -30,6 +30,11 @@
                 </div>
                 <div class="post-text">
                     <div class="post-h3-main">{{ post.date_in|date:'d M Y' }}</div>
+                    <div class="post-h3-main">
+                        {% for category in post.category.all %}
+                           {{ category }}
+                        {% endfor %}
+                    </div>
                     <div class="post-h2-main">{{ post.text|truncatechars:200}}</div>
                     <div class="post-h3-right">Автор: {{ post.author.user }}</div>
                 </div>

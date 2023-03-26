@@ -30,9 +30,3 @@ class PostsFilter(FilterSet):
         label='Дата, от',
         lookup_expr='date__gt'
     )
-
-    # class Meta:
-    #     model = Post
-    #     fields = {
-    #         'title': ['icontains'],
-    #     }
