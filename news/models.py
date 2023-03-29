@@ -7,6 +7,8 @@ from django.urls import reverse
 class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     rating = models.IntegerField(default=0)
+    subscribers = models.ManyToManyField(
+        User, blank=True, null=True, default=None, related_name='authors')
 
     def update_rating(self):
         sum_post = self.post_set.all().aggregate(
@@ -37,7 +39,7 @@ class Category(models.Model):
     theme = models.CharField(max_length=50, unique=True,
                              verbose_name='Категория')
     subscribers = models.ManyToManyField(
-        User, through='UserCategory', verbose_name='Подписчики')
+        User, blank=True, null=True, default=None, related_name='categories')
 
     def __str__(self):
         return self.theme
@@ -93,14 +95,6 @@ class PostCategory(models.Model):
 
     def __str__(self):
         return f'{self.category} / {self.post.title}'
-
-
-class UserCategory(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return f'{self.category} / {self.user}'
 
 
 class Comment(models.Model):

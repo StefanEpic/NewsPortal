@@ -4,25 +4,30 @@
 {% load custom_tags %}
 
 {% block title %}
-Новости
+Категории
 {% endblock title %}
 
 {% block content %}
     <div class="content-menu">
-        <div class="content-menu-left"></div>
+        <div class="content-menu-left">
+            <a href="#" onclick="history.back();">Назад</a>
+        </div>
         <div class="content-menu-right">
-            {% if request.user.is_authenticated and not is_not_author %}
+            {% if is_not_category_subscriber %}
             <ul>
-                <li><a href="create/">Добавить новость</a></li>
+                <li><a href="{% url 'subscribe_category' category.id %}">Подписаться на категорию</a></li>
             </ul>
             {% endif %}
         </div>
     </div>    
+    
+    <div class="post-h1" align="center">{{ category }}</div>
+    <hr class="hr-shelf">
 
-    {% for post in posts %}
+    {% for post in categorylist %}
         <div class="post">
             <div class="post-title">
-                <div class="post-h1"><a href="{{ post.id }}">{{ post.title|censor }}</a></div>
+                <div class="post-h1"><a href="/{{ post.id }}">{{ post.title|censor }}</a></div>
             </div>
             <div class="main">
                 <div class="post-image">
@@ -64,12 +69,3 @@
     </div>
 
 {% endblock content %}
-
-{% block rightsidebar %}
-    <div class="right-sidebar-filter">
-        <form class="form-filter" action="" method="get">
-            {{ filterset.form.as_p }}
-            <input type="submit" value="Применить" />
-        </form>
-    </div>
-{% endblock rightsidebar %}

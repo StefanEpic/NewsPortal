@@ -195,6 +195,10 @@
 
 .content-menu a {
   margin-left: 35px;
+  font-family: 'Caveat';
+  font-size: 24px;
+  color: #edbc7d;
+  text-decoration: none;
 }
 
 .content-menu-right {
@@ -208,13 +212,6 @@
 .content-menu li {
   margin-right: 35px;
   display: inline-block;
-}
-
-.content-menu a {
-  font-family: 'Caveat';
-  font-size: 24px;
-  color: #edbc7d;
-  text-decoration: none;
 }
 
 .content-menu a:hover {
@@ -305,6 +302,23 @@
   font-size: 16px;
   text-align: right;
   margin-right: 50px;
+}
+
+.post-h3-main a,
+.post-h3-right  a,
+.post-h3-right-in  a,
+.post-h3 a {
+  font-family: 'Caveat';
+  font-size: 16px;
+  margin-right: 10px;
+  color: black;
+}
+
+.post-h3-main a:hover,
+.post-h3-right  a:hover,
+.post-h3-right-in a:hover,
+.post-h3 a:hover  {
+  color: #b47c42;
 }
 
 .post-img {

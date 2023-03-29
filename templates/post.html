@@ -6,27 +6,27 @@
 {{ post.title }}
 {% endblock title %}
 
-{% block content %}
-    {% if request.user.is_authenticated and not is_not_author %}
-        <div class="content-menu">
-            <div class="content-menu-left">
-                <a href="#" onclick="history.back();">Назад</a>
-            </div>
-            <div class="content-menu-right">
-                <ul>
-                    <li><a href="{{ post.id }}/edit/">Редактировать</a></li>
-                    <li><a href="{{ post.id }}/delete/">Удалить</a></li>
-                </ul>
-            </div>
+{% block content %}  
+    <div class="content-menu">
+        <div class="content-menu-left">
+            <a href="#" onclick="history.back();">Назад</a>
         </div>
-    {% endif %}
+        <div class="content-menu-right">
+            {% if request.user.is_authenticated and not is_not_author %}
+            <ul>
+                <li><a href="{{ post.id }}/edit/">Редактировать</a></li>
+                <li><a href="{{ post.id }}/delete/">Удалить</a></li>
+            </ul>
+            {% endif %}
+        </div>
+    </div>
 
     <div class="post">
         <div class="post-h1">{{ post.title|censor }}</div>
         <div class="post-h3">Дата: {{ post.date_in|date:'d M Y' }}</div>
         <div class="post-h3">
             {% for category in post.category.all %}
-               {{ category }}
+                <a href="{% url 'category_list' category.id %}">{{ category }}</a>
             {% endfor %}
         </div>
     </div>
@@ -43,5 +43,7 @@
         <div class="post-h2">{{ post.text|censor|linebreaks }}</div>
     </div>
     <hr class="hr-shelf">
-    <div class="post-h3-right-in">Автор: {{ post.author.user }}</div>
+    <div class="post-h3-right-in">
+        Автор: <a href="{% url 'author_list' post.author.id %}">{{ post.author.user }}</a>
+    </div>
 {% endblock content %}
