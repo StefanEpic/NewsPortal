@@ -13,11 +13,13 @@
             <a href="#" onclick="history.back();">Назад</a>
         </div>
         <div class="content-menu-right">
-            {% if is_not_author_subscriber %}
             <ul>
-                <li><a href="{% url 'subscribe_author' author.id %}">Подписаться на автора</a></li>
+                {% if is_not_author_subscriber %}
+                    <li><a href="{% url 'subscribe_author' author.id %}">Подписаться на автора</a></li>
+                {% else %}
+                <li><a href="{% url 'unsubscribe_author' author.id %}">Отписаться от автора</a></li>
+                {% endif %}
             </ul>
-            {% endif %}
         </div>
     </div>    
     

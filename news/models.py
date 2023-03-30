@@ -8,7 +8,7 @@ class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     rating = models.IntegerField(default=0)
     subscribers = models.ManyToManyField(
-        User, blank=True, null=True, default=None, related_name='authors')
+        User, blank=True, related_name='authors')
 
     def update_rating(self):
         sum_post = self.post_set.all().aggregate(
@@ -39,7 +39,7 @@ class Category(models.Model):
     theme = models.CharField(max_length=50, unique=True,
                              verbose_name='Категория')
     subscribers = models.ManyToManyField(
-        User, blank=True, null=True, default=None, related_name='categories')
+        User, blank=True, related_name='categories')
 
     def __str__(self):
         return self.theme

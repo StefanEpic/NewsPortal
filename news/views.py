@@ -137,15 +137,31 @@ def upgrade_me(request):
 
 @login_required
 def subscribe_category(request, pk):
-    user = user.request
+    user = request.user
     category = Category.objects.get(id=pk)
     category.subscribers.add(user)
-    return render(request, 'posts.html')
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
 def subscribe_author(request, pk):
-    user = user.request
+    user = request.user
     author = Author.objects.get(id=pk)
     author.subscribers.add(user)
-    return render(request, 'posts.html')
+    return redirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required
+def unsubscribe_category(request, pk):
+    user = request.user
+    category = Category.objects.get(id=pk)
+    category.subscribers.remove(user)
+    return redirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required
+def unsubscribe_author(request, pk):
+    user = request.user
+    author = Author.objects.get(id=pk)
+    author.subscribers.remove(user)
+    return redirect(request.META.get('HTTP_REFERER'))

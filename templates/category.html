@@ -13,11 +13,13 @@
             <a href="#" onclick="history.back();">Назад</a>
         </div>
         <div class="content-menu-right">
-            {% if is_not_category_subscriber %}
             <ul>
-                <li><a href="{% url 'subscribe_category' category.id %}">Подписаться на категорию</a></li>
-            </ul>
-            {% endif %}
+                {% if is_not_category_subscriber %}
+                    <li><a href="{% url 'subscribe_category' category.id %}">Подписаться на категорию</a></li>
+                {% else %}
+                   <li><a href="{% url 'unsubscribe_category' category.id %}">Отписаться от категории</a></li>
+                {% endif %}
+            </ul>           
         </div>
     </div>    
     
