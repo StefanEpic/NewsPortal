@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.urls import reverse
+from django_lifecycle import LifecycleModel, hook, AFTER_CREATE
+
+from .notifications import send_notifications_about_author
 
 
 class Author(models.Model):
@@ -45,7 +48,7 @@ class Category(models.Model):
         return self.theme
 
 
-class Post(models.Model):
+class Post(LifecycleModel):
     news = 'news'
     arti = 'arti'
 
@@ -87,6 +90,12 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('post_detail', args=[str(self.id)])
+
+    @hook(AFTER_CREATE)
+    def email_subscribe_author(self):
+        subscribers = self.author.subscribers.all()
+        send_notifications_about_author(self.preview(), self.pk,
+                                        self.title, subscribers, self.author.user.username)
 
 
 class PostCategory(models.Model):
