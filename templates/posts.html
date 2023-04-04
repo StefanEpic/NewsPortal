@@ -25,9 +25,11 @@
                 <div class="post-h1"><a href="{{ post.id }}">{{ post.title|censor }}</a></div>
             </div>
             <div class="main">
+                {% if post.image %}
                 <div class="post-image">
                     <img src="{{MEDIA_DIR}}{{post.image.url}}">
                 </div>
+                {% endif %}
                 <div class="post-text">
                     <div class="post-h3-main">{{ post.date_in|date:'d M Y' }}</div>
                     <div class="post-h3-main">

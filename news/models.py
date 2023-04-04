@@ -1,7 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
+from django.core import serializers
 from django.urls import reverse
+from django_lifecycle import LifecycleModel, hook, AFTER_CREATE
+
+from .tasks import author_send_notify_about_new_post
 
 
 class Author(models.Model):
@@ -45,7 +49,7 @@ class Category(models.Model):
         return self.theme
 
 
-class Post(models.Model):
+class Post(LifecycleModel):
     news = 'news'
     arti = 'arti'
 
@@ -87,6 +91,11 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('post_detail', args=[str(self.id)])
+
+    @hook(AFTER_CREATE)
+    def email_subscribe_author(self):
+        # post = serializers.serialize("json", self.objects.all())
+        author_send_notify_about_new_post.delay(self)
 
 
 class PostCategory(models.Model):
