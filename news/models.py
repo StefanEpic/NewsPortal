@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
-from django.core import serializers
 from django.urls import reverse
 from django_lifecycle import LifecycleModel, hook, AFTER_CREATE
 
@@ -94,8 +93,9 @@ class Post(LifecycleModel):
 
     @hook(AFTER_CREATE)
     def email_subscribe_author(self):
-        # post = serializers.serialize("json", self.objects.all())
-        author_send_notify_about_new_post.delay(self)
+        subscribers = self.author.subscribers.all()
+        author_send_notify_about_new_post.delay(self.preview(), self.pk,
+                                    self.title, subscribers, self.author.user.username)
 
 
 class PostCategory(models.Model):

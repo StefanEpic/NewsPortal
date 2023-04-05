@@ -7,21 +7,13 @@ from .notifications import send_notifications_about_category, send_notifications
 
 
 @shared_task
-def category_send_notify_about_new_post(sender, instance, **kwargs):
-    if kwargs['action'] == 'post_add':
-        categories = instance.category.all()
-        for category in categories:
-            subscribers = category.subscribers.all()
-            send_notifications_about_category(instance.preview(), instance.pk,
-                                              instance.title, subscribers, category)
+def category_send_notify_about_new_post(preview, pk, title, subscribers, category):
+    send_notifications_about_category(preview, pk, title, subscribers, category)
 
 
 @shared_task
-def author_send_notify_about_new_post(post):
-    subscribers = post.author.subscribers.all()
-    send_notifications_about_author(post.preview(), post.pk,
-                                    post.title, subscribers, post.author.user.username)
-
+def author_send_notify_about_new_post(preview, pk, title, subscribers, user):
+    send_notifications_about_author(preview, pk, title, subscribers, user)
 
 # @shared_task
 # def send_notify_every_monday_8am():
