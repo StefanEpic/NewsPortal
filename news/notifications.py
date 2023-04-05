@@ -10,7 +10,7 @@ def send_notifications_about_author(preview, pk, title, subscribers, author):
             {
                 'text': preview,
                 'link': f'{settings.SITE_URL}{pk}',
-                'user': sub.username,
+                'user': sub[0],
                 'author': author,
             }
         )
@@ -19,7 +19,7 @@ def send_notifications_about_author(preview, pk, title, subscribers, author):
             subject=title,
             body='',
             from_email=settings.DEFAULT_FROM_EMAIL,
-            to=[sub.email],
+            to=[sub[1]],
         )
 
         msg.attach_alternative(html_content, 'text/html')
@@ -33,7 +33,7 @@ def send_notifications_about_category(preview, pk, title, subscribers, category)
             {
                 'text': preview,
                 'link': f'{settings.SITE_URL}{pk}',
-                'user': sub.username,
+                'user': sub[0],
                 'category': category,
             }
         )
@@ -42,7 +42,7 @@ def send_notifications_about_category(preview, pk, title, subscribers, category)
             subject=title,
             body='',
             from_email=settings.DEFAULT_FROM_EMAIL,
-            to=[sub.email],
+            to=[sub[1]],
         )
 
         msg.attach_alternative(html_content, 'text/html')
@@ -56,7 +56,7 @@ def send_notifications_every_monday(posts, subscribers):
             {
                 'link': settings.SITE_URL,
                 'posts': posts,
-                'user': sub.username,
+                'user': sub[0]
             }
         )
 
@@ -64,7 +64,7 @@ def send_notifications_every_monday(posts, subscribers):
             subject='Статьи за неделю',
             body='',
             from_email=settings.DEFAULT_FROM_EMAIL,
-            to=[sub.email],
+            to=[sub[1]],
         )
 
         msg.attach_alternative(html_content, 'text/html')

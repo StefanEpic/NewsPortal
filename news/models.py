@@ -4,8 +4,6 @@ from django.db.models import Sum
 from django.urls import reverse
 from django_lifecycle import LifecycleModel, hook, AFTER_CREATE
 
-from .tasks import author_send_notify_about_new_post
-
 
 class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -90,12 +88,6 @@ class Post(LifecycleModel):
 
     def get_absolute_url(self):
         return reverse('post_detail', args=[str(self.id)])
-
-    @hook(AFTER_CREATE)
-    def email_subscribe_author(self):
-        subscribers = self.author.subscribers.all()
-        author_send_notify_about_new_post.delay(self.preview(), self.pk,
-                                    self.title, subscribers, self.author.user.username)
 
 
 class PostCategory(models.Model):
