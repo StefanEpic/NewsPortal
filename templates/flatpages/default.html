@@ -31,7 +31,7 @@
             <div class="menu-bar">
                 <div class="menu-bar-login">
                     {% if request.user.is_authenticated %}
-                        <span>Привет, </span><a href="http://127.0.0.1:8000/personal/">{{ user.username }}!</a>
+                        <span>Привет, </span><a href="http://127.0.0.1:8000/personal/{{ user.pk }}">{{ user.username }}!</a>
                         <a class="menu-bar-login-but" href="http://127.0.0.1:8000/accounts/logout/">Выйти</a>
                     {% else %}
                         <a class="menu-bar-login-but" href="http://127.0.0.1:8000/accounts/login/">Войти</a>

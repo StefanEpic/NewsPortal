@@ -1,12 +1,15 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from .models import Author, Category, Post
+from django.contrib.auth.models import User
 from .filters import PostsFilter
-from .forms import PostForm
+from .forms import PostForm, PersonalForm
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
+from django.http import Http404
 
 
 class PostsList(ListView):
@@ -27,6 +30,13 @@ class PostsList(ListView):
         context['is_not_author'] = not self.request.user.groups.filter(
             name='author').exists()
         return context
+
+    def get_object(self, *args, **kwargs):
+        obj = cache.get(f'{self.kwargs["pk"]}', None)
+        if not obj:
+            obj = super().get_object(queryset=self.queryset)
+            cache.set(f'{self.kwargs["pk"]}', obj)
+        return obj
 
 
 class PostDetail(DetailView):
@@ -53,6 +63,11 @@ class PostCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         context['is_not_author'] = not self.request.user.groups.filter(
             name='author').exists()
         return context
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.author = Author.objects.get(user=self.request.user)
+        return super().form_valid(form)
 
 
 class PostUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
@@ -82,14 +97,20 @@ class PostDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
         return context
 
 
-class PersonalView(LoginRequiredMixin, TemplateView):
+class PersonalView(LoginRequiredMixin, UpdateView):
+    form_class = PersonalForm
+    model = User
     template_name = 'account/personal.html'
+    success_url = reverse_lazy('post_list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['is_not_author'] = not self.request.user.groups.filter(
-            name='author').exists()
-        return context
+        pk = self.request.user.pk
+        path = int(self.request.path.split('/')[-2])
+        if pk == path:
+            return context
+        else:
+            raise Http404
 
 
 class CategoryList(ListView):
@@ -132,6 +153,7 @@ def upgrade_me(request):
     author_group = Group.objects.get(name='author')
     if not request.user.groups.filter(name='author').exists():
         author_group.user_set.add(user)
+        Author.objects.create(user=user)
     return redirect('/')
 
 

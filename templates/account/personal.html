@@ -1,14 +1,36 @@
 {% extends "flatpages/default.html" %}
 
 {% block content %}
-<h2>Страница авторизованного пользователя {{request.user.username}}</h2>
-<div> Здесь может содержаться персональная информация для каждого пользователя </div>
-
+<div class="post-h1" align="center">Страница авторизованного пользователя {{request.user.username}}</div>
 {% if is_not_author %}
     <div>
-        <a class="menu-bar-login-but" href="http://127.0.0.1:8000/upgrade/">Хочу стать автором!</a>
+        <input type="button" value="Хочу стать автором!" onClick="window.location='http://127.0.0.1:8000/upgrade/'" />fgrgr
     </div>
 {% endif %}
-
-<button> <a href="http://127.0.0.1:8000/accounts/logout/">Выйти</a> </button>
+<hr class="hr-shelf">
+<form class="form-edit" action="" enctype="multipart/form-data" method="post">
+    {% csrf_token %}
+    <div>
+        <div class="form-edit-label">Логин:</div>
+        <div class="form-edit-field">{{ form.username }}</div>
+    </div>
+    <div>
+        <div class="form-edit-label">Пароль:</div>
+        <div class="form-edit-field"><input type="button" value="Сменить пароль" onClick="window.location='http://127.0.0.1:8000/accounts/password/change/'" /></div>
+    </div>
+    <div>
+        <div class="form-edit-label">Почта:</div>
+        <div class="form-edit-field">{{ form.email }}</div>
+    </div>
+    <div>
+        <div class="form-edit-label">Имя:</div>
+        <div class="form-edit-field">{{ form.first_name }}</div>
+    </div>
+    <div>
+        <div class="form-edit-label">Фамилия:</div>
+        <div class="form-edit-field">{{ form.last_name }}</div>
+    </div>
+    <hr class="hr-shelf">
+    <input type="submit" value="Сохранить" />
+</form>
 {% endblock %}

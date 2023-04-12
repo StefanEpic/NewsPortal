@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.urls import reverse
-from django_lifecycle import LifecycleModel, hook, AFTER_CREATE
+from django.core.cache import cache
 
 
 class Author(models.Model):
@@ -46,7 +46,7 @@ class Category(models.Model):
         return self.theme
 
 
-class Post(LifecycleModel):
+class Post(models.Model):
     news = 'news'
     arti = 'arti'
 
@@ -88,6 +88,10 @@ class Post(LifecycleModel):
 
     def get_absolute_url(self):
         return reverse('post_detail', args=[str(self.id)])
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        cache.delete(f'{self.pk}')
 
 
 class PostCategory(models.Model):

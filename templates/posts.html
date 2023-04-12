@@ -69,9 +69,25 @@
 
 {% block rightsidebar %}
     <div class="right-sidebar-filter">
-        <form class="form-filter" action="" method="get">
-            {{ filterset.form.as_p }}
-            <input type="submit" value="Применить" />
+        <form action="" method="get">
+            <div class="form-filter-field">{{ filterset.form.title.label_tag }}</div>
+            <div class="form-filter-field">{{ filterset.form.title }}</div>
+            <div class="form-filter-field">
+                <div class="form-filter-field-label">{{ filterset.form.category.label_tag }}</div>
+                <div class="form-filter-field-wrap">{{ filterset.form.category }}</div>
+            </div>
+            <div class="form-filter-field">
+                <div class="form-filter-field-label">{{ filterset.form.author.label_tag }}</div>
+                <div class="form-filter-field-wrap">{{ filterset.form.author }}</div>
+            </div>
+            <div class="form-filter-field">
+                <div class="form-filter-field-label">{{ filterset.form.date.label_tag }}</div>
+                <div class="form-filter-field-wrap">{{ filterset.form.date }}</div>
+            </div>
+            <div class="form-filter-but">
+                <input type="submit" value="Применить"/>
+                <input type="button" onclick="location.href='/';" value="Сбросить"/>
+            </div>
         </form>
     </div>
 {% endblock rightsidebar %}
