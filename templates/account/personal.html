@@ -2,13 +2,8 @@
 
 {% block content %}
 <div class="post-h1" align="center">Страница авторизованного пользователя {{request.user.username}}</div>
-{% if is_not_author %}
-    <div>
-        <input type="button" value="Хочу стать автором!" onClick="window.location='http://127.0.0.1:8000/upgrade/'" />fgrgr
-    </div>
-{% endif %}
 <hr class="hr-shelf">
-<form class="form-edit" action="" enctype="multipart/form-data" method="post">
+<form class="form-edit" method="post">
     {% csrf_token %}
     <div>
         <div class="form-edit-label">Логин:</div>
@@ -16,7 +11,7 @@
     </div>
     <div>
         <div class="form-edit-label">Пароль:</div>
-        <div class="form-edit-field"><input type="button" value="Сменить пароль" onClick="window.location='http://127.0.0.1:8000/accounts/password/change/'" /></div>
+        <div class="form-edit-field"><input type="button" value="Сменить пароль" onClick="window.location='http://127.0.0.1:8000/accounts/password/change/'"></div>
     </div>
     <div>
         <div class="form-edit-label">Почта:</div>
@@ -31,6 +26,9 @@
         <div class="form-edit-field">{{ form.last_name }}</div>
     </div>
     <hr class="hr-shelf">
-    <input type="submit" value="Сохранить" />
+    <input type="submit" value="Сохранить">
+    {% if is_not_author %}
+    <input type="button" value="Хочу стать автором!" onClick="window.location='http://127.0.0.1:8000/upgrade/'">
+    {% endif %}
 </form>
 {% endblock %}
