@@ -6,13 +6,13 @@
 {{ post.title }}
 {% endblock title %}
 
-{% block content %}  
+{% block content %}
     <div class="content-menu">
         <div class="content-menu-left">
             <a href="#" onclick="history.back();">Назад</a>
         </div>
         <div class="content-menu-right">
-            {% if request.user.is_authenticated and not is_not_author %}
+            {% if request.user.is_authenticated and not is_not_post_author %}
             <ul>
                 <li><a href="{{ post.id }}/edit/">Редактировать</a></li>
                 <li><a href="{{ post.id }}/delete/">Удалить</a></li>
@@ -42,8 +42,26 @@
     <div class="post">
         <div class="post-h2">{{ post.text|censor|linebreaks }}</div>
     </div>
-    <hr class="hr-shelf">
     <div class="post-h3-right-in">
         Автор: <a href="{% url 'author_list' post.author.id %}">{{ post.author.user }}</a>
     </div>
+    <hr class="hr-shelf">
+    <div class="post">
+        <div class="post-h1" align="center">Комментарии</div>
+    </div>
+    {% for comment in comments %}
+        <div class="post comment-form">
+            <div class="post-h3">{{ comment.user }}</div>
+            <div class="post-h3">{{ comment.date_in|date:'d M Y' }}</div>
+            <div class="post-h2">{{ comment.text }}</div>
+        </div>
+    {% endfor %}
+    {% if request.user.is_authenticated %}
+    <form class="post comment-form-edit" method="post">
+        {% csrf_token %}
+        <div class="post-h3">Ваш комментарий:</div>
+        <div>{{ form.text }}</div>
+        <input type="submit" value="Сохранить">
+    </form>
+    {% endif %}
 {% endblock content %}

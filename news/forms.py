@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post
+from .models import Post, Comment
 from allauth.account.forms import SignupForm
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
@@ -27,6 +27,12 @@ class PersonalForm(forms.ModelForm):
             'first_name',
             'last_name',
         ]
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']
 
 
 class BasicSignupForm(SignupForm):

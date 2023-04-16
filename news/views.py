@@ -1,9 +1,9 @@
-from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
-from .models import Author, Category, Post
+from django.urls import reverse_lazy, reverse
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from .models import Author, Category, Post, Comment
 from django.contrib.auth.models import User
 from .filters import PostsFilter
-from .forms import PostForm, PersonalForm
+from .forms import PostForm, PersonalForm, CommentForm
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.models import Group
@@ -31,31 +31,52 @@ class PostsList(ListView):
             name='author').exists()
         return context
 
-    def get_object(self, *args, **kwargs):
-        obj = cache.get(f'{self.kwargs["pk"]}', None)
-        if not obj:
-            obj = super().get_object(queryset=self.queryset)
-            cache.set(f'{self.kwargs["pk"]}', obj)
-        return obj
 
-
-class PostDetail(DetailView):
-    model = Post
+class PostDetail(CreateView):
+    form_class = CommentForm
+    model = Comment
     template_name = 'post.html'
-    context_object_name = 'post'
+    context_object_name = 'comments'
+    ordering = '-date_in'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['is_not_author'] = not self.request.user.groups.filter(
             name='author').exists()
+
+        pk = self.request.path.split('/')[-1]
+        post = Post.objects.get(id=pk)
+        context['post'] = post
+
+        comments = Comment.objects.filter(post=pk)
+        context['comments'] = comments
         return context
+
+    def form_valid(self, form):
+        comment = form.save(commit=False)
+        comment.user = self.request.user
+
+        pk = self.request.path.split('/')[-1]
+        comment.post = Post.objects.get(id=pk)
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('post_detail', kwargs={"pk": self.request.path.split('/')[-1]})
+
+    #  Кэширование
+    # def get_object(self, *args, **kwargs):
+    #     obj = cache.get(f'{self.kwargs["pk"]}', None)
+    #     if not obj:
+    #         obj = super().get_object(queryset=self.queryset)
+    #         cache.set(f'{self.kwargs["pk"]}', obj)
+    #     return obj
 
 
 class PostCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     form_class = PostForm
     model = Post
     template_name = 'post_edit.html'
-    reverse_lazy('post_list')
+    reverse_lazy('post_list/<int:pk>')
     permission_required = ('news.add_post')
 
     def get_context_data(self, **kwargs):
@@ -79,8 +100,16 @@ class PostUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['is_not_author'] = not self.request.user.groups.filter(
-            name='author').exists()
+        user = self.request.user
+        author = self.get_object().author.user
+        print(user)
+        print(author)
+        if user == author:
+            context['is_not_post_author'] = False
+            print('False')
+        else:
+            context['is_not_post_author'] = True
+            print('True')
         return context
 
 
@@ -92,8 +121,7 @@ class PostDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['is_not_author'] = not self.request.user.groups.filter(
-            name='author').exists()
+        context['this_post_author'] = self.post.author
         return context
 
 
@@ -111,8 +139,7 @@ class PersonalView(LoginRequiredMixin, UpdateView):
         path = int(self.request.path.split('/')[-2])
         if pk == path:
             return context
-        else:
-            raise Http404
+        raise Http404
 
 
 class CategoryList(ListView):
