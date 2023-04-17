@@ -99,13 +99,8 @@ class PostUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView, UserPa
     reverse_lazy('post_list/<int:pk>')
     permission_required = ('news.change_post')
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['is_not_author'] = not self.request.user.groups.filter(
-    #         name='author').exists()
-    #     return context
     def test_func(self):
-        return self.request.user.pk == self.get_object().author_id
+        return self.request.user == self.get_object().author
 
 
 class PostDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView, UserPassesTestMixin):
@@ -114,13 +109,8 @@ class PostDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView, UserPa
     success_url = reverse_lazy('post_list')
     permission_required = ('news.delete_post')
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['is_not_author'] = not self.request.user.groups.filter(
-    #         name='author').exists()
-    #     return context
     def test_func(self):
-        return self.request.user.pk == self.get_object().author_id
+        return self.request.user == self.get_object().author
 
 
 class PersonalView(LoginRequiredMixin, UpdateView):
