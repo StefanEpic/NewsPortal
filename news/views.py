@@ -10,6 +10,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.http import Http404
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 
 class PostsList(ListView):
@@ -91,38 +92,35 @@ class PostCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class PostUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+class PostUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView, UserPassesTestMixin):
     form_class = PostForm
     model = Post
     template_name = 'post_edit.html'
     reverse_lazy('post_list/<int:pk>')
     permission_required = ('news.change_post')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        author = self.get_object().author.user
-        print(user)
-        print(author)
-        if user == author:
-            context['is_not_post_author'] = False
-            print('False')
-        else:
-            context['is_not_post_author'] = True
-            print('True')
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['is_not_author'] = not self.request.user.groups.filter(
+    #         name='author').exists()
+    #     return context
+    def test_func(self):
+        return self.request.user.pk == self.get_object().author_id
 
 
-class PostDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+class PostDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView, UserPassesTestMixin):
     model = Post
     template_name = 'post_delete.html'
     success_url = reverse_lazy('post_list')
     permission_required = ('news.delete_post')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['this_post_author'] = self.post.author
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['is_not_author'] = not self.request.user.groups.filter(
+    #         name='author').exists()
+    #     return context
+    def test_func(self):
+        return self.request.user.pk == self.get_object().author_id
 
 
 class PersonalView(LoginRequiredMixin, UpdateView):

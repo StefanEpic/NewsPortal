@@ -12,7 +12,7 @@
             <a href="#" onclick="history.back();">Назад</a>
         </div>
         <div class="content-menu-right">
-            {% if request.user.is_authenticated and not is_not_post_author %}
+            {% if request.user.is_authenticated and not is_not_author %}
             <ul>
                 <li><a href="{{ post.id }}/edit/">Редактировать</a></li>
                 <li><a href="{{ post.id }}/delete/">Удалить</a></li>
@@ -46,9 +46,11 @@
         Автор: <a href="{% url 'author_list' post.author.id %}">{{ post.author.user }}</a>
     </div>
     <hr class="hr-shelf">
+    {% if comments %}
     <div class="post">
         <div class="post-h1" align="center">Комментарии</div>
     </div>
+    {% endif %}
     {% for comment in comments %}
         <div class="post comment-form">
             <div class="post-h3">{{ comment.user }}</div>
