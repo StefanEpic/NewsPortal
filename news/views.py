@@ -10,7 +10,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.http import Http404
-from django.contrib.auth.mixins import UserPassesTestMixin
+from .utils import TestIsAuthorThisPort, TestIsThisUserPersonalPage
 
 
 class PostsList(ListView):
@@ -42,15 +42,14 @@ class PostDetail(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['is_not_author'] = not self.request.user.groups.filter(
-            name='author').exists()
+        # context['is_not_author'] = not self.request.user.groups.filter(
+        #     name='author').exists()
 
         pk = self.request.path.split('/')[-1]
         post = Post.objects.get(id=pk)
         context['post'] = post
-
-        comments = Comment.objects.filter(post=pk)
-        context['comments'] = comments
+        context['comments'] = Comment.objects.filter(post=pk)
+        context['is_author_this_post'] = (self.request.user == post.author.user)
         return context
 
     def form_valid(self, form):
@@ -92,28 +91,21 @@ class PostCreate(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class PostUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView, UserPassesTestMixin):
+class PostUpdate(LoginRequiredMixin, TestIsAuthorThisPort, UpdateView):
     form_class = PostForm
     model = Post
     template_name = 'post_edit.html'
     reverse_lazy('post_list/<int:pk>')
-    permission_required = ('news.change_post')
-
-    def test_func(self):
-        return self.request.user == self.get_object().author
 
 
-class PostDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView, UserPassesTestMixin):
+class PostDelete(LoginRequiredMixin, TestIsAuthorThisPort, DeleteView):
     model = Post
     template_name = 'post_delete.html'
     success_url = reverse_lazy('post_list')
     permission_required = ('news.delete_post')
 
-    def test_func(self):
-        return self.request.user == self.get_object().author
 
-
-class PersonalView(LoginRequiredMixin, UpdateView):
+class PersonalView(LoginRequiredMixin, TestIsThisUserPersonalPage, UpdateView):
     form_class = PersonalForm
     model = User
     template_name = 'account/personal.html'
@@ -123,11 +115,7 @@ class PersonalView(LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context['is_not_author'] = not self.request.user.groups.filter(
             name='author').exists()
-        pk = self.request.user.pk
-        path = int(self.request.path.split('/')[-2])
-        if pk == path:
-            return context
-        raise Http404
+        return context
 
 
 class CategoryList(ListView):

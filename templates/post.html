@@ -12,7 +12,7 @@
             <a href="#" onclick="history.back();">Назад</a>
         </div>
         <div class="content-menu-right">
-            {% if request.user.is_authenticated and not is_not_author %}
+            {% if is_author_this_post %}
             <ul>
                 <li><a href="{{ post.id }}/edit/">Редактировать</a></li>
                 <li><a href="{{ post.id }}/delete/">Удалить</a></li>
