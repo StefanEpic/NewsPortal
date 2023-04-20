@@ -34,6 +34,13 @@ class CommentForm(forms.ModelForm):
         fields = ['text']
 
 
+class ContactForm(forms.Form):
+    first_name = forms.CharField(max_length=50, label='Имя')
+    last_name = forms.CharField(max_length=50, label='Фамилия')
+    email_address = forms.EmailField(max_length=150, label='Эл. почта')
+    message = forms.CharField(widget=forms.Textarea, max_length=2000, label='Сообщение')
+
+
 class BasicSignupForm(SignupForm):
     def save(self, request):
         user = super(BasicSignupForm, self).save(request)

@@ -3,13 +3,14 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Author, Category, Post, Comment
 from django.contrib.auth.models import User
 from .filters import PostsFilter
-from .forms import PostForm, PersonalForm, CommentForm
+from .forms import PostForm, PersonalForm, CommentForm, ContactForm
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
-from django.http import Http404
+
+from .sending_emails import send_contact_email
 from .utils import TestIsAuthorThisPort, TestIsThisUserPersonalPage
 
 
@@ -150,6 +151,15 @@ class AuthorList(ListView):
         context['is_not_author_subscriber'] = self.request.user not in self.author.subscribers.all()
         context['author'] = self.author
         return context
+
+
+def contact(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            send_contact_email(form)
+    form = ContactForm()
+    return render(request, "contacts.html", {'form': form})
 
 
 @login_required

@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
+from django.core.mail import send_mail, BadHeaderError
+from django.http import HttpResponse
 
 
 def send_notifications_about_author(preview, pk, title, subscribers, author):
@@ -69,3 +71,20 @@ def send_notifications_every_monday(posts, subscribers):
 
         msg.attach_alternative(html_content, 'text/html')
         msg.send()
+
+
+def send_contact_email(form):
+    subject = "Обратная связь"
+    body = {
+        'first_name': form.cleaned_data['first_name'],
+        'last_name': form.cleaned_data['last_name'],
+        'email': form.cleaned_data['email_address'],
+        'message': form.cleaned_data['message'],
+    }
+    message = "\n".join(body.values())
+    try:
+        send_mail(subject, message,
+                  'admin@example.com',
+                  ['admin@example.com'])
+    except BadHeaderError:
+        return HttpResponse('Найден некорретный заголовок')

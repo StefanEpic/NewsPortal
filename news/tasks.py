@@ -2,7 +2,7 @@ from celery import shared_task
 import datetime
 
 from .models import Post, Category
-from .notifications import send_notifications_about_category, send_notifications_about_author, \
+from .sending_emails import send_notifications_about_category, send_notifications_about_author, \
     send_notifications_every_monday
 
 
