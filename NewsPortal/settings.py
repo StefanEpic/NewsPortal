@@ -79,7 +79,7 @@ LOGGING = {
             'format': '%(asctime)s %(levelname)s %(pathname)s %(message)s'
         },
         'error': {
-            'format': '%(asctime)s %(levelname)s %(pathname)s exc_info %(message)s'
+            'format': '%(asctime)s %(levelname)s %(pathname)s %(exc_info)s %(message)s'
         },
         'info': {
             'format': '%(asctime)s %(levelname)s %(module)s %(message)s'
