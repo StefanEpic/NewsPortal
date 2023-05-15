@@ -31,6 +31,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']
 
+ADMINS = [('Admin', os.getenv('DEFAULT_FROM_EMAIL'))]
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -64,6 +66,112 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware'
 ]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'style': '{',
+    'formatters': {
+        'console_debug': {
+            'format': '%(asctime)s %(levelname)s %(message)s'
+        },
+        'console_warning': {
+            'format': '%(asctime)s %(levelname)s %(pathname)s %(message)s'
+        },
+        'error': {
+            'format': '%(asctime)s %(levelname)s %(pathname)s exc_info %(message)s'
+        },
+        'info': {
+            'format': '%(asctime)s %(levelname)s %(module)s %(message)s'
+        },
+    },
+    'filters': {
+        'debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+    'handlers': {
+        'console_debug': {
+            'level': 'DEBUG',
+            'filters': ['debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'console_debug'
+        },
+        'console_warning': {
+            'level': 'WARNING',
+            'filters': ['debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'console_warning'
+        },
+        'console_error': {
+            'level': 'ERROR',
+            'filters': ['debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'error'
+        },
+        'file_general': {
+            'level': 'INFO',
+            'filters': ['debug_false'],
+            'class': 'logging.FileHandler',
+            'formatter': 'info',
+            'filename': 'logs/general.log'
+        },
+        'file_errors': {
+            'level': 'ERROR',
+            'filters': ['debug_false'],
+            'class': 'logging.FileHandler',
+            'formatter': 'info',
+            'filename': 'logs/errors.log'
+        },
+        'file_security': {
+            'level': 'INFO',
+            'filters': ['debug_false'],
+            'class': 'logging.FileHandler',
+            'formatter': 'info',
+            'filename': 'logs/security.log'
+        },
+        'email': {
+            'level': 'ERROR',
+            'filters': ['debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler',
+            'formatter': 'info'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console_debug', 'console_warning', 'console_error', 'file_general'],
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['file_errors', 'email'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.server': {
+            'handlers': ['file_errors', 'email'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.template': {
+            'handlers': ['file_errors'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.db.backends': {
+            'handlers': ['file_errors'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.security': {
+            'handlers': ['file_security'],
+            'level': 'INFO',
+            'propagate': False,
+        }
+    }
+}
 
 ROOT_URLCONF = 'NewsPortal.urls'
 
