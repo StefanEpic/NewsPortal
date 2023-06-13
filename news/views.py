@@ -13,6 +13,10 @@ from django.core.cache import cache
 from .sending_emails import send_contact_email
 from .utils import TestIsAuthorThisPort, TestIsThisUserPersonalPage
 
+from django.http import HttpResponse
+from django.utils.translation import gettext as _
+from django.views import View
+
 
 class PostsList(ListView):
     model = Post
@@ -46,23 +50,20 @@ class PostDetail(CreateView):
         # context['is_not_author'] = not self.request.user.groups.filter(
         #     name='author').exists()
 
-        pk = self.request.path.split('/')[-1]
-        post = Post.objects.get(id=pk)
+        post = Post.objects.get(id=self.kwargs['pk'])
         context['post'] = post
-        context['comments'] = Comment.objects.filter(post=pk)
+        context['comments'] = Comment.objects.filter(post=self.kwargs['pk'])
         context['is_author_this_post'] = (self.request.user == post.author.user)
         return context
 
     def form_valid(self, form):
         comment = form.save(commit=False)
         comment.user = self.request.user
-
-        pk = self.request.path.split('/')[-1]
-        comment.post = Post.objects.get(id=pk)
+        comment.post = Post.objects.get(id=self.kwargs['pk'])
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('post_detail', kwargs={"pk": self.request.path.split('/')[-1]})
+        return reverse('post_detail', kwargs={"pk": self.kwargs['pk']})
 
     #  Кэширование
     # def get_object(self, *args, **kwargs):
