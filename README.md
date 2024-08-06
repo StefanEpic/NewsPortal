@@ -5,14 +5,6 @@
 - Подписка на категорию, автора. При добавлении новостей приходят уведомления на почту
 - Кэширование, логирование
 
-## 😜 Demo:
-Можно попробовать:
-
-👉 [News Portal](https://stefanepic.ru/newsportal/):
-
-- username: admin
-- password: 12345
-
 #### 📄 Main page:
 <img src="https://github.com/StefanEpic/NewsPortal/blob/main/about/about_001.png" width="800">
 
